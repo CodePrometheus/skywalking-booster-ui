@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Layout from "@/layout/Index.vue";
 import { useAppStoreWithOut } from "@/store/modules/app";
 import type { MenuOptions } from "@/types/app";
-import Layer from "@/views/Layer.vue";
+const Layout = () => import("@/layout/Index.vue");
+const Layer = () => import("@/views/Layer.vue");
 
 function layerDashboards() {
   const appStore = useAppStoreWithOut();

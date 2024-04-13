@@ -25,6 +25,10 @@ limitations under the License. -->
 <script lang="ts" setup>
   import { onMounted, ref, onUnmounted, watch, toRaw } from "vue";
   import { useDemandLogStore } from "@/store/modules/demand-log";
+  import { monaco } from "@/utils/monaco-editor";
+  import { useAppStoreWithOut } from "@/store/modules/app";
+  import { Themes } from "@/constants/data";
+  const appStore = useAppStoreWithOut();
 
   /*global Nullable */
   const demandLogStore = useDemandLogStore();
@@ -35,7 +39,6 @@ limitations under the License. -->
     init();
   });
   async function init() {
-    const monaco = await import("monaco-editor");
     setTimeout(() => {
       monacoInstanceGen(monaco);
     }, 500);
@@ -49,9 +52,10 @@ limitations under the License. -->
       language: "text",
       wordWrap: true,
       minimap: { enabled: false },
-      readonly: true,
+      readonly: false,
+      theme: appStore.theme === Themes.Dark ? "vs-dark" : "vs",
     });
-    toRaw(monacoInstance.value).updateOptions({ readOnly: true });
+    toRaw(monacoInstance.value).updateOptions({ readOnly: false });
     editorLayout();
   }
   function editorLayout() {

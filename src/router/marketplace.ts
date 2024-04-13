@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 import type { RouteRecordRaw } from "vue-router";
-import Layout from "@/layout/Index.vue";
-import Marketplace from "@/views/Marketplace.vue";
+const Layout = () => import("@/layout/Index.vue");
+const Marketplace = () => import("@/views/Marketplace.vue");
 
 export const routesMarketplace: Array<RouteRecordRaw> = [
   {

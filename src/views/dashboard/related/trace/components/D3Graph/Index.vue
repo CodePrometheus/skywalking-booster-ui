@@ -22,7 +22,7 @@ limitations under the License. -->
 <script lang="ts" setup>
   import { ref, watch, onBeforeUnmount, onMounted } from "vue";
   import type { PropType } from "vue";
-  import _ from "lodash";
+  import { find, filter } from "lodash-es";
   import * as d3 from "d3";
   import ListGraph from "../../utils/d3-trace-list";
   import TreeGraph from "../../utils/d3-trace-tree";
@@ -75,6 +75,7 @@ limitations under the License. -->
     if (!traceGraph.value) {
       return;
     }
+    d3.selectAll(".d3-tip").remove();
     if (props.type === "List") {
       tree.value = new ListGraph(traceGraph.value, handleSelectSpan);
       tree.value.init({ label: "TRACE_ROOT", children: segmentId.value }, props.data, fixSpansSize.value);
@@ -125,7 +126,7 @@ limitations under the License. -->
           spanId: span.spanId - 1,
           parentSpanId: span.spanId - 2,
         };
-        if (!item && !_.find(fixSpans, fixSpanKeyContent)) {
+        if (!item && !find(fixSpans, fixSpanKeyContent)) {
           fixSpans.push({
             ...fixSpanKeyContent,
             refs: [],
@@ -167,7 +168,7 @@ limitations under the License. -->
             spanId: i,
             parentSpanId: i > -1 ? 0 : -1,
           };
-          if (!_.find(fixSpans, fixSpanKeyContent)) {
+          if (!find(fixSpans, fixSpanKeyContent)) {
             fixSpans.push({
               ...fixSpanKeyContent,
               refs: [],
@@ -193,7 +194,7 @@ limitations under the License. -->
               spanId: 0,
               parentSpanId: -1,
             };
-            if (!_.find(fixSpans, fixRootSpanKeyContent)) {
+            if (!find(fixSpans, fixRootSpanKeyContent)) {
               fixSpans.push({
                 ...fixRootSpanKeyContent,
                 refs: [],
@@ -240,8 +241,8 @@ limitations under the License. -->
           }
         }
         if (s.isBroken) {
-          const children = _.filter(props.data, (span: Span) => {
-            return _.find(span.refs, {
+          const children = filter(props.data, (span: Span) => {
+            return find(span.refs, {
               traceId: s.traceId,
               parentSegmentId: s.segmentId,
               parentSpanId: s.spanId,

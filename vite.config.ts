@@ -25,6 +25,8 @@ import monacoEditorPlugin from "vite-plugin-monaco-editor";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import path from "path";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
+import { visualizer } from "rollup-plugin-visualizer";
+import { Plugin as viteCDNPlugin } from "vite-plugin-cdn-import";
 
 const OUTPUT_DIR = "dist";
 const pathSrc = path.resolve(__dirname, "./src");
@@ -35,7 +37,9 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     plugins: [
       vue(),
       vueJsx(),
-      monacoEditorPlugin({}),
+      monacoEditorPlugin({
+        languageWorkers: ["editorWorkerService"],
+      }),
       AutoImport({
         imports: ["vue"],
         resolvers: [ElementPlusResolver()],
@@ -50,6 +54,22 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         iconDirs: [path.resolve(__dirname, "./src/assets/icons")],
         // Specify symbolId format
         symbolId: "[name]",
+      }),
+      // viteCDNPlugin({
+      //   modules: [
+      //     {
+      //       name: "",
+      //       var: "",
+      //       path: "",
+      //     },
+      //   ],
+      // }),
+      visualizer({
+        // emitFile: true,
+        // filename: "stats.html",
+        open: true, // 打包后自动打开页面
+        gzipSize: true, // 查看 gzip 压缩大小
+        brotliSize: true, // 查看 brotli 压缩大小
       }),
     ],
     resolve: {
@@ -73,7 +93,8 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: 3000,
       proxy: {
         "/graphql": {
-          target: `${VITE_SW_PROXY_TARGET || "http://127.0.0.1:12800"}`,
+          target: `${VITE_SW_PROXY_TARGET || "http://demo.skywalking.apache.org"}`,
+          // target: `${VITE_SW_PROXY_TARGET || "http://localhost:12800"}`,
           changeOrigin: true,
         },
       },

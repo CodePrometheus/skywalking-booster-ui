@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import type { RouteRecordRaw } from "vue-router";
-import NotFound from "@/views/NotFound.vue";
+const NotFound = () => import("@/views/NotFound.vue");
 
 export const routesNotFound: Array<RouteRecordRaw> = [
   {

@@ -16,7 +16,7 @@
  */
 
 import type { Ref, Span, StatisticsSpan, StatisticsGroupRef, TraceTreeRef } from "@/types/trace";
-import lodash from "lodash";
+import { find, filter } from "lodash-es";
 
 export default class TraceUtil {
   public static buildTraceDataList(data: Span[]): string[] {
@@ -97,7 +97,7 @@ export default class TraceUtil {
           spanId: span.spanId - 1,
           parentSpanId: span.spanId - 2,
         };
-        if (index === -1 && !lodash.find(fixSpans, fixSpanKeyContent)) {
+        if (index === -1 && !find(fixSpans, fixSpanKeyContent)) {
           fixSpans.push({
             ...fixSpanKeyContent,
             refs: [],
@@ -132,7 +132,7 @@ export default class TraceUtil {
               spanId: parentSpanId,
               parentSpanId: parentSpanId > -1 ? 0 : -1,
             };
-            if (!lodash.find(fixSpans, fixSpanKeyContent)) {
+            if (!find(fixSpans, fixSpanKeyContent)) {
               fixSpans.push({
                 ...fixSpanKeyContent,
                 refs: [],
@@ -158,7 +158,7 @@ export default class TraceUtil {
                 spanId: 0,
                 parentSpanId: -1,
               };
-              if (!lodash.find(fixSpans, fixRootSpanKeyContent)) {
+              if (!find(fixSpans, fixRootSpanKeyContent)) {
                 fixSpans.push({
                   ...fixRootSpanKeyContent,
                   refs: [],
@@ -210,8 +210,8 @@ export default class TraceUtil {
           }
         }
         if (curSegment.isBroken) {
-          const children = lodash.filter(data, (span: Span) => {
-            return lodash.find(span.refs, {
+          const children = filter(data, (span: Span) => {
+            return find(span.refs, {
               traceId: curSegment.traceId,
               parentSegmentId: curSegment.segmentId,
               parentSpanId: curSegment.spanId,

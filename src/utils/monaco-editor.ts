@@ -14,28 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { RouteRecordRaw } from "vue-router";
-const Layout = () => import("@/layout/Index.vue");
-const Alarm = () => import("@/views/Alarm.vue");
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 
-export const routesAlarm: Array<RouteRecordRaw> = [
-  {
-    path: "",
-    name: "Alarm",
-    meta: {
-      i18nKey: "alarm",
-      icon: "spam",
-      hasGroup: false,
-      activate: true,
-      title: "Alerting",
-    },
-    component: Layout,
-    children: [
-      {
-        path: "/alerting",
-        name: "Alarm",
-        component: Alarm,
-      },
-    ],
+self.MonacoEnvironment = {
+  getWorker: function (workerId, label) {
+    return new editorWorker();
   },
-];
+};
+
+export { monaco };

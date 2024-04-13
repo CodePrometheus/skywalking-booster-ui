@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 import type { RouteRecordRaw } from "vue-router";
-import Layout from "@/layout/Index.vue";
-import Settings from "@/views/Settings.vue";
+const Layout = () => import("@/layout/Index.vue");
+const Settings = () => import("@/views/Settings.vue");
 
 export const routesSettings: Array<RouteRecordRaw> = [
   {
